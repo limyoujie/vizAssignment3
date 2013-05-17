@@ -5,27 +5,32 @@ var radius = d3.scale.sqrt()
     .domain([0, 1e6])
     .range([0, 10]);
 
-var path = d3.geo.path();
+var albers = d3.geo.albersUsa();
 
-var svg = d3.select("body").append("svg")
+var path = d3.geo.path().projection(albers);
+
+var svg = d3.select("#main").append("svg")
     .attr("width", width)
     .attr("height", height);
 
 queue()
     .defer(d3.json, "us.json")
-    .defer(d3.json, "us-state-centroids.json")
-    .defer(d3.csv,"fakedata.csv")
+    .defer(d3.csv, "fakedata.csv")
     .await(ready);
 
-function ready(error, us, centroid, circles) {
+function ready(error, us, circles) {
+
+
   svg.append("path")
       .attr("class", "states")
       .datum(topojson.feature(us, us.objects.states))
       .attr("d", path);
 
-  svg.selectAll(".symbol")
-      .data(centroid.features.sort(function(a, b) { return b.properties.population - a.properties.population; }))
-    .enter().append("path")
-      .attr("class", "symbol")
-      .attr("d", path.pointRadius(function(d) { return radius(d.properties.population); }));
+  svg.selectAll("circle")
+      .data(circles)
+    .enter().append("circle")
+      .attr("cx", function(d) { return albers([d.y,d.x])[0]})
+      .attr("cy", function(d) { return albers([d.y,d.x])[1]})
+      .attr("r", function(d) { return d.Attribute1/4});
+
 }
