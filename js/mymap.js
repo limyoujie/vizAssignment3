@@ -1,9 +1,9 @@
 
-var active;
+var active, inactive;
 
-var margin = {top: 20, right: 20, bottom: 20, left: 20},
+var margin = {top: -20, right: 20, bottom: 20, left: 20},
     padding = {top: 60, right: 60, bottom: 60, left: 60},
-    outerWidth = 960,
+    outerWidth = 750,
     outerHeight = 500,
     innerWidth = outerWidth - margin.left - margin.right,
     innerHeight = outerHeight - margin.top - margin.bottom,
@@ -11,7 +11,7 @@ var margin = {top: 20, right: 20, bottom: 20, left: 20},
     height = innerHeight - padding.top - padding.bottom;
 
 var projection = d3.geo.albersUsa()
-    .scale(1000)
+    .scale(800)
     .translate([width / 2, height / 2]);
 
 var path = d3.geo.path()
@@ -49,30 +49,34 @@ function ready(error, us, circles) {
       .attr("class", "mesh")
       .attr("d", path);
 
-  g.selectAll("circle")
-      .data(circles)
-      .enter()
-      .append("circle")
-      .attr("cx", function(d) { return projection([d.y,d.x])[0]*Math.random()*3})
-      .attr("cy", function(d) { return projection([d.y,d.x])[1]*Math.random()-100})
-      .attr("r", function(d) { return d.Attribute1/2})
-      .style("fill", "blue")
-      .style("stroke", "red")
-      .style("stroke-width",4)
-      .transition()
-      .duration(10000)
-      .attr("cx", function(d) { return projection([d.y,d.x])[0]})
-      .attr("cy", function(d) { return projection([d.y,d.x])[1]})
-      .attr("r", function(d){ return d.Attribute1/4})
-      .style("stroke","black")
-      .style("stroke-width",1);
+  // g.selectAll("circle")
+  //     .data(circles)
+  //     .enter()
+  //     .append("circle")
+  //     .attr("cx", function(d) { return projection([d.y,d.x])[0]*Math.random()*3})
+  //     .attr("cy", function(d) { return projection([d.y,d.x])[1]*Math.random()-100})
+  //     .attr("r", function(d) { return d.Attribute1/2})
+  //     .style("fill", "blue")
+  //     .style("stroke", "red")
+  //     .style("stroke-width",4)
+  //     .transition()
+  //     .duration(10000)
+  //     .attr("cx", function(d) { return projection([d.y,d.x])[0]})
+  //     .attr("cy", function(d) { return projection([d.y,d.x])[1]})
+  //     .attr("r", function(d){ return d.Attribute1/4})
+  //     .style("stroke","black")
+  //     .style("stroke-width",1);
 
 }
 
 function click(d) {
   if (active === d) return reset();
-  g.selectAll(".active").classed("active", false);
+  g.selectAll(".active")
+    .classed("active", false);
+  g.selectAll(".feature")
+    .classed("inactive", true);
   d3.select(this).classed("active", active = d);
+  
 
   var b = path.bounds(d);
   g.transition().duration(750).attr("transform",
@@ -82,6 +86,11 @@ function click(d) {
 }
 
 function reset() {
-  g.selectAll(".active").classed("active", active = false);
+  
   g.transition().duration(750).attr("transform", "");
+  g.selectAll(".feature.inactive")
+    .classed("inactive", inactive = false);
+  g.selectAll(".active")
+    .classed("active", active = false);
+
 }

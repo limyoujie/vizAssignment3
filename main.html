@@ -6,6 +6,10 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="http://d3js.org/queue.v1.min.js"></script>
+    <script src="http://code.jquery.com/jquery.js"></script>
   <style>
   rect {
     fill: none;
@@ -15,6 +19,11 @@
   .feature {
     fill: #ccc;
     cursor: pointer;
+  }
+  .feature.inactive{
+    /*fill: transparent;*/
+    fill: #ccc;
+    fill-opacity: .5;
   }
 
   .feature.active {
@@ -27,6 +36,11 @@
     stroke-width: .5px;
     stroke-linejoin: round;
   }
+  .squares {
+  fill: #eee;
+  stroke: #000;
+  stroke-width: 1.5px;
+}
   </style>
   </head>
   <body>
@@ -49,21 +63,75 @@
         </div>
       </div>
     </div>
-  
+    <br>
+    <br>
+    <br>
     <div class="row-fluid">
-      <div class="span12">
+      <div class="span12" id="mymap2">
         <div class="row-fluid">
-          <div class="span8" id="mymap"></div>
-          <div class="span4"></div>
+          <div class="offset1 span7" id="mymap"></div>
+          <!-- Hypothesis: Biggest providers covers most of the locations with higher speeds than smaller providers -->
+          <div class="span3">
+            <table class="table table-striped table-condensed">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Name2</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Test</td>
+                  <td>Test2</td>
+                </tr>
+                <tr>
+                  <td>Test</td>
+                  <td>Test2</td>
+                </tr>
+                <tr>
+                  <td>Test</td>
+                  <td>Test2</td>
+                </tr>
+                <tr>
+                  <td>Test</td>
+                  <td>Test2</td>
+                </tr>
+              </tbody>
+            </table>
+              
+            <table class="table table-bordered table-condensed">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Name2</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Test</td>
+                    <td>Test2</td>
+                  </tr>
+                  <tr>
+                    <td>Test</td>
+                    <td>Test2</td>
+                  </tr>
+                  <tr>
+                    <td>Test</td>
+                    <td>Test2</td>
+                  </tr>
+                  <tr>
+                    <td>Test</td>
+                    <td>Test2</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>      
         </div>
       </div>
-    </div>
-
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="http://d3js.org/topojson.v1.min.js"></script>
-    <script src="http://d3js.org/queue.v1.min.js"></script>
-    <script src="http://code.jquery.com/jquery.js"></script>
+    </div> 
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/mymap.js"></script>
+    <script src="js/PseudoDemersCartogram.js"></script>
+    <script src="js/mymap.js"></script> 
   </body>
 </html>
