@@ -1,3 +1,4 @@
+
 var active;
 
 var margin = {top: 20, right: 20, bottom: 20, left: 20},
@@ -14,7 +15,7 @@ var projection = d3.geo.albersUsa()
     .translate([width / 2, height / 2]);
 
 var path = d3.geo.path()
-    .projection(projection);
+    .projection(projection);    
 
 var svg = d3.select("#mymap").append("svg")
     .attr("width", outerWidth)
@@ -59,7 +60,7 @@ function ready(error, us, circles) {
       .style("stroke", "red")
       .style("stroke-width",4)
       .transition()
-      .duration(300)
+      .duration(10000)
       .attr("cx", function(d) { return projection([d.y,d.x])[0]})
       .attr("cy", function(d) { return projection([d.y,d.x])[1]})
       .attr("r", function(d){ return d.Attribute1/4})
@@ -76,7 +77,7 @@ function click(d) {
   var b = path.bounds(d);
   g.transition().duration(750).attr("transform",
       "translate(" + projection.translate() + ")"
-      + "scale(" + .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height) + ")"
+      + "scale(" + .85 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height) + ")"
       + "translate(" + -(b[1][0] + b[0][0]) / 2 + "," + -(b[1][1] + b[0][1]) / 2 + ")");
 }
 
