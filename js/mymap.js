@@ -1,6 +1,13 @@
-var width = 960,
-    height = 500,
-    active;
+var active;
+
+var margin = {top: 20, right: 20, bottom: 20, left: 20},
+    padding = {top: 60, right: 60, bottom: 60, left: 60},
+    outerWidth = 960,
+    outerHeight = 500,
+    innerWidth = outerWidth - margin.left - margin.right,
+    innerHeight = outerHeight - margin.top - margin.bottom,
+    width = innerWidth - padding.left - padding.right,
+    height = innerHeight - padding.top - padding.bottom;
 
 var projection = d3.geo.albersUsa()
     .scale(1000)
@@ -10,8 +17,9 @@ var path = d3.geo.path()
     .projection(projection);
 
 var svg = d3.select("#mymap").append("svg")
-    .attr("width", width)
-    .attr("height", height);
+    .attr("width", outerWidth)
+    .attr("height", outerHeight)
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 svg.append("rect")
     .attr("width", width)
