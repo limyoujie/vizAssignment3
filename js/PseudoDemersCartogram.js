@@ -72,7 +72,8 @@ d3.json("data/us-state-centroids1.json", function(error, states) {
       .attr("width", function(d) { return d.r * 2; })
       .attr("height", function(d) { return d.r * 2; })
       //.style("fill-opacity", 0.5)
-      .style("fill", function(d) { return color(d.value); });
+      .style("fill", function(d) { return color(d.value); })
+      .style("cursor", "move");
 
     // node.append("rect")
     //   .attr("class", "squares")
@@ -88,7 +89,8 @@ d3.json("data/us-state-centroids1.json", function(error, states) {
       .attr("dy", function(d) { return d.r;})
       .text(function(d) { return d.name; })
       .style("font-size", function(d) {return d.value * 150;})
-      .style("fill", "white");
+      .style("fill", "white")
+      .style("cursor", "move");
 
 
   function tick(e) {

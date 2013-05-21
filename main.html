@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bootstrap 101 Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="css/buttons/bootstrap-formhelpers.css" rel="stylesheet">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="http://d3js.org/queue.v1.min.js"></script>
+    <script src="http://code.jquery.com/jquery.js"></script>
+  <style>
+  @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,700);
+  rect {
+    fill: none;
+    pointer-events: all;
+  }
+
+  .feature {
+    fill: #ccc;
+    cursor: drag;
+  }
+  .feature.inactive{
+    /*fill: transparent;*/
+    fill: #ccc;
+    fill-opacity: .5;
+  }
+
+  .feature.active {
+    fill: orange;
+  }
+
+  .mesh {
+    fill: none;
+    stroke: #fff;
+    stroke-width: .5px;
+    stroke-linejoin: round;
+  }
+  .squares {
+    fill: #eee;
+    stroke: #000;
+    stroke-width: 1.5px;
+  }
+  h1 {
+    font-size: 96px;
+    margin-top: .3em;
+    margin-bottom: 20px;
+    margin-left: 30px;
+    font-family: "Yanone Kaffeesatz";
+    text-rendering: optimizeLegibility;
+  }
+  h4 {
+    font-size: 36px;
+    line-height: 30px;
+    margin-top: .3em;
+    margin-bottom: 10px;
+    margin-left: 30px;
+    font-family: "Yanone Kaffeesatz";
+    text-rendering: optimizeLegibility;
+  }
+  p {
+    font-size: 16px;
+    margin-left: 30px;
+    margin-right: 20px;
+    font-family: "Helvetica Neue";
+  }
+  hr {
+    margin-left: 30px;
+    margin-right: 20px;
+  }
+  footer {
+    margin-top: -10px;
+    margin-left: 30px;
+    font-size: 14px;
+  }
+  #reset {
+    position: absolute;
+    margin-left: 860px;
+    margin-top: -530px;
+  }
+  .span4 {
+    margin-left: -50px;
+  }
+  #mymap {
+    margin-left: 50px;
+    margin-top: -40px;
+  }
+  #mymap2 {
+    margin-left: 50px;
+  }
+  #firstbox,#secondbox {
+    margin-left: 30px;
+  }
+  </style>
+  </head>
+  <body>
+
+<!--     <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">Broadband Map</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Map</a></li>
+              <li><a href="#about">About</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <br>
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="row-fluid">
+          <div class="span8">
+            <h1>Battle of the Bands</h1>
+            <h4>How do the country's most popular wireless providers stack up?  Is your provider the fastest in the state? Who's got the broadest bands in the land...</h4>
+            <p>We present a visual tool to help compare individual broadband providers at the state level.  Start your comparison by selecting providers from the dropdowns on the right.  The main visual will show comparative speed of provider 1 to provider 2.  The minimap on the bottom right can also be used to help navigate through the results quickly.
+            <div id="mymap2"></div>
+            <a href="" id="reset">reset all</a>
+            <footer>By Yoojong Bang, Benedict Lim, Joseph Riley, Maria Virginia Rodriguez</footer>
+        </div>
+          <!-- Hypothesis: Biggest providers covers most of the locations with higher speeds than smaller providers -->
+          <div class="span4">
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+          <p>First, select the provider that you would like to serve as a base for this comparison.  All metrics will be presented relevant to this choice.</p>
+            <div class="bfh-selectbox" id="firstbox">
+            <input type="hidden" name="selectbox3" value="">
+            <a class="bfh-selectbox-toggle" role="button" data-toggle="bfh-selectbox" href="#">
+              <span class="bfh-selectbox-option input-medium" data-option="12">Option 12</span>
+              <b class="caret"></b>
+            </a>
+            <div class="bfh-selectbox-options">
+              <input type="text" class="bfh-selectbox-filter">
+              <div role="listbox">
+              <ul role="option">
+                <li><a tabindex="-1" href="#" data-option="1">Option 1</a></li>
+                <li><a tabindex="-1" href="#" data-option="2">Option 2</a></li>
+                <li><a tabindex="-1" href="#" data-option="3">Option 3</a></li>
+                <li><a tabindex="-1" href="#" data-option="4">Option 4</a></li>
+                <li><a tabindex="-1" href="#" data-option="5">Option 5</a></li>
+                <li><a tabindex="-1" href="#" data-option="6">Option 6</a></li>
+                <li><a tabindex="-1" href="#" data-option="7">Option 7</a></li>
+                <li><a tabindex="-1" href="#" data-option="8">Option 8</a></li>
+              </ul>
+            </div>
+            </div>
+          </div>
+            <hr>
+            <p>Next, select a provider you would like to compare with your initial choice.<p>
+            <div class="bfh-selectbox" id="secondbox">
+            <input type="hidden" name="selectbox3" value="">
+            <a class="bfh-selectbox-toggle" role="button" data-toggle="bfh-selectbox" href="#">
+              <span class="bfh-selectbox-option input-medium" data-option="12">Option 12</span>
+              <b class="caret"></b>
+            </a>
+            <div class="bfh-selectbox-options">
+              <input type="text" class="bfh-selectbox-filter">
+              <div role="listbox">
+              <ul role="option">
+                <li><a tabindex="-1" href="#" data-option="1">Option 1</a></li>
+                <li><a tabindex="-1" href="#" data-option="2">Option 2</a></li>
+                <li><a tabindex="-1" href="#" data-option="3">Option 3</a></li>
+                <li><a tabindex="-1" href="#" data-option="4">Option 4</a></li>
+                <li><a tabindex="-1" href="#" data-option="5">Option 5</a></li>
+                <li><a tabindex="-1" href="#" data-option="6">Option 6</a></li>
+              </ul>
+            </div>
+            </div>
+          </div>
+          <hr>
+<!--             <table class="table table-bordered table-condensed">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Name2</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Test</td>
+                    <td>Test2</td>
+                  </tr>
+                  <tr>
+                    <td>Test</td>
+                    <td>Test2</td>
+                  </tr>
+                  <tr>
+                    <td>Test</td>
+                    <td>Test2</td>
+                  </tr>
+                  <tr>
+                    <td>Test</td>
+                    <td>Test2</td>
+                  </tr>
+                </tbody>
+              </table> -->
+              <p>Mouse over the following minimap to quickly navigate the data on the left.  Additional information will automatically be displayed via a tooltip.</p>
+             <div id="mymap"></div>
+            </div>
+          </div>      
+        </div>
+      </div>
+    </div> 
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/buttons/bootstrap-formhelpers-selectbox.js"></script>
+    <script src="js/mymap.js"></script> 
+    <script src="js/PseudoDemersCartogram.js"></script>
+  </body>
+</html>
