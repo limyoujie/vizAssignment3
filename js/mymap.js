@@ -57,10 +57,10 @@ function ready(error, us, data, states) {
       .attr("class", "feature")
       .on("click", click);
 
-  g.selectAll("path")
-      .data(nodes2)
-      .style("fill", function(d) { return color(d.value); })
-      .on("mouseover", function(d) { console.log(d); });
+  // g.selectAll("path")
+  //     .data(nodes2)
+  //     .style("fill", function(d) { return color(d.value); })
+  //     .on("mouseover", function(d) { console.log(d); });
 
 }
 
