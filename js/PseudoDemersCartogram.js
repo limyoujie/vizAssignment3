@@ -16,7 +16,7 @@ var color = d3.scale.linear()
 
 var margin1 = {top: -50, right: 0, bottom: 0, left: 0},
     width1 = 900 - margin1.left - margin1.right,
-    height1 = 575 - margin1.top - margin1.bottom,
+    height1 = 500 - margin1.top - margin1.bottom,
     padding = 3;
 
 var projection1  = d3.geo.albersUsa();
@@ -71,7 +71,17 @@ d3.json("data/us-state-centroids1.json", function(error, states) {
       .attr("class", "squares")
       .attr("width", function(d) { return d.r * 2; })
       .attr("height", function(d) { return d.r * 2; })
+      //.style("fill-opacity", 0.5)
       .style("fill", function(d) { return color(d.value); });
+
+    // node.append("rect")
+    //   .attr("class", "squares")
+    //   .attr("x", function(d) { return d.r/1.8;})
+    //   .attr("y", function(d) { return d.r;})
+    //   .attr("width", function(d) { return d.r * .8; })
+    //   .attr("height", function(d) { return d.r * .8; })
+    //   .style("fill-opacity", 0.5)
+    //   .style("fill", function(d) { return color(d.value/4); });
 
     node.append("text")
       .attr("dx", function(d) { return d.r/1.8;})
