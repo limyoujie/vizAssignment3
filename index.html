@@ -8,17 +8,29 @@
     <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href="css/buttons/bootstrap-formhelpers.css" rel="stylesheet">
 <!-- <script src="http://d3js.org/d3.v3.min.js"></script>
-     <script src="http://d3js.org/topojson.v1.min.js"></script>
-     <script src="http://d3js.org/queue.v1.min.js"></script> -->
+     <script src="http://d3js.org/topojson.v1.min.js"></script> -->
+     <script src="http://d3js.org/queue.v1.min.js"></script>
      <script src="js/d3.v3.min.js"></script>
      <script src="js/topojson.js"></script>
-     <script src="js/queue.min.js"></script>
     <script src="http://code.jquery.com/jquery.js"></script>
   <style>
   @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,700);
+  
   rect {
     fill: none;
     pointer-events: all;
+  }
+  .tooltip {   
+    position: relative;           
+    text-align: center;           
+    width: 60px;                  
+    height: 28px;                 
+    padding: 2px;             
+    font: 12px sans-serif;        
+    background: lightsteelblue;   
+    border: 0px;      
+    border-radius: 8px;           
+    pointer-events: all;         
   }
 
   .feature {
@@ -87,7 +99,7 @@
     margin-left: -50px;
   }
   #mymap {
-    margin-left: 50px;
+    margin-left: 0px;
     margin-top: -40px;
   }
   #mymap2 {
@@ -100,25 +112,6 @@
   </style>
   </head>
   <body>
-
-<!--     <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="brand" href="#">Broadband Map</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li class="active"><a href="#">Map</a></li>
-              <li><a href="#about">About</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div> -->
     <br>
     <div class="row-fluid">
       <div class="span12">
@@ -146,7 +139,7 @@
             <div class="bfh-selectbox" id="firstbox">
             <input type="hidden" name="selectbox3" value="">
             <a class="bfh-selectbox-toggle" role="button" data-toggle="bfh-selectbox" href="#">
-              <span class="bfh-selectbox-option input-medium" data-option="12">Option 12</span>
+              <span class="bfh-selectbox-option input-medium" data-option="12">Combatant 1</span>
               <b class="caret"></b>
             </a>
             <div class="bfh-selectbox-options">
@@ -170,7 +163,7 @@
             <div class="bfh-selectbox" id="secondbox">
             <input type="hidden" name="selectbox3" value="">
             <a class="bfh-selectbox-toggle" role="button" data-toggle="bfh-selectbox" href="#">
-              <span class="bfh-selectbox-option input-medium" data-option="12">Option 12</span>
+              <span class="bfh-selectbox-option input-medium" data-option="12">Combatant 2</span>
               <b class="caret"></b>
             </a>
             <div class="bfh-selectbox-options">
@@ -188,32 +181,6 @@
             </div>
           </div>
           <hr>
-<!--             <table class="table table-bordered table-condensed">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Name2</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Test</td>
-                    <td>Test2</td>
-                  </tr>
-                  <tr>
-                    <td>Test</td>
-                    <td>Test2</td>
-                  </tr>
-                  <tr>
-                    <td>Test</td>
-                    <td>Test2</td>
-                  </tr>
-                  <tr>
-                    <td>Test</td>
-                    <td>Test2</td>
-                  </tr>
-                </tbody>
-              </table> -->
               <p>Mouse over the following minimap to quickly navigate the data on the left.  Additional information will automatically be displayed via a tooltip.</p>
              <div id="mymap"></div>
             </div>
@@ -223,7 +190,7 @@
     </div> 
     <script src="js/bootstrap.min.js"></script>
     <script src="js/buttons/bootstrap-formhelpers-selectbox.js"></script>
-    <script src="js/mymap.js"></script> 
+    <!--<script src="js/mymap.js"></script>--> 
     <script src="js/PseudoDemersCartogram.js"></script>
   </body>
 </html>

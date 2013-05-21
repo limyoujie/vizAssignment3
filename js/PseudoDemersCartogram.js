@@ -1,52 +1,67 @@
-
-
-// Ratio of Obese (BMI >= 30) in U.S. Adults, CDC 2008
-var valueById = [
-   NaN, .187, .198,  NaN, .133, .175, .151,  NaN, .100, .125,
-  .171,  NaN, .172, .133,  NaN, .108, .142, .167, .201, .175,
-  .159, .169, .177, .11, .163, .117, .182, .153, .195, .189,
-  .134, .163, .133, .151, .145, .130, .139, .169, .164, .175,
-  .135, .152, .169,  NaN, .132, .167, .139, .184, .159, .140,
-  .146, .157,  NaN, .139, .183, .160, .143
-];
-
 var color = d3.scale.linear()
-              .domain([0, d3.max(valueById)])
+              .domain([0, 10])
               .range(["blue", "purple"]);
+
+var margin = {top: -20, right: 20, bottom: 20, left: 20},
+    padding = {top: 60, right: 60, bottom: 60, left: 60},
+    outerWidth = 450,
+    outerHeight = 300,
+    innerWidth = outerWidth - margin.left - margin.right,
+    innerHeight = outerHeight - margin.top - margin.bottom,
+    width = innerWidth - padding.left - padding.right,
+    height = innerHeight - padding.top - padding.bottom; /////MINIMAP
+
+var projection1 = d3.geo.albersUsa()
+    .scale(475)
+    .translate([width / 1.1, height / 1]);///MINIMAP
+
+var projection  = d3.geo.albersUsa();////MAINMAP
 
 var margin1 = {top: -50, right: 0, bottom: 0, left: 0},
     width1 = 900 - margin1.left - margin1.right,
     height1 = 500 - margin1.top - margin1.bottom,
-    padding = 3;
+    padding = 3;////MAINMAP
 
-var projection1  = d3.geo.albersUsa();
+var path = d3.geo.path()
+    .projection(projection1);
 
 var radius = d3.scale.sqrt()
-    .domain([0, d3.max(valueById)])
+    .domain([0, 10])
     .range([0, 35]);
 
 var force = d3.layout.force()
-    .charge(50)
+    .charge(10)
     .gravity(0)
     .size([width1, height1]);
 
+var svg = d3.select("#mymap").append("svg")
+    .attr("width", outerWidth)
+    .attr("height", outerHeight)
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");//MINIMAP
+
 var svg1 = d3.select("#mymap2").append("svg")
     .attr("width", width1)
-    .attr("height", height1);
+    .attr("height", height1);//MAIN MAP
 
-d3.json("data/us-state-centroids1.json", function(error, states) {
+queue()
+    .defer(d3.json, "data/us.json")
+    .defer(d3.csv, "data/fakedata.csv")
+    .defer(d3.json, "data/us-state-centroids1.json")
+    .await(ready);    
+
+function ready(error, us, fakedata, states) {
   var nodes = states.features
-      .filter(function(d) { return !isNaN(valueById[+d.id]); })
       .map(function(d) {
-        var point = projection1(d.geometry.coordinates),
-            value = valueById[+d.id];
+        var point = projection(d.geometry.coordinates),
+            abb = d.id;
             namestate = d.properties.abb;
-        if (isNaN(value)) fail();
+            ATT = d.properties.ATT;
+
         return {
           x: point[0]-120, y: point[1],
           x0: point[0]-120, y0: point[1],
-          r: radius(value),
-          value: value, name: namestate
+          r: radius(ATT), name: namestate,
+          att: ATT
         };
       });
 
@@ -60,37 +75,53 @@ d3.json("data/us-state-centroids1.json", function(error, states) {
       .enter().append("g")
       .call(force.drag);
 
-/*    node.append("image")
-      .attr("xlink:href", "cell.gif")
-      .attr("x", -8)
-      .attr("y", -8)
-      .attr("width", function(d) { return d.r * 2; })
-      .attr("height", function(d) { return d.r * 2; })*/
+    // node.append("image")
+    //   .attr("xlink:href", "cell.gif")
+    //   .attr("x", -8)
+    //   .attr("y", -8)
+    //   .attr("width", function(d) { return d.r * 2; })
+    //   .attr("height", function(d) { return d.r * 2; })
 
     node.append("rect")
-      .attr("class", "squares")
+      .attr("class", function(d) { return d.name + ' squares';})
       .attr("width", function(d) { return d.r * 2; })
       .attr("height", function(d) { return d.r * 2; })
-      //.style("fill-opacity", 0.5)
-      .style("fill", function(d) { return color(d.value); });
+      .style("stroke", "white")
+      .style("fill", function(d) { return color(d.att); });
 
-    // node.append("rect")
-    //   .attr("class", "squares")
-    //   .attr("x", function(d) { return d.r/1.8;})
-    //   .attr("y", function(d) { return d.r;})
-    //   .attr("width", function(d) { return d.r * .8; })
-    //   .attr("height", function(d) { return d.r * .8; })
-    //   .style("fill-opacity", 0.5)
-    //   .style("fill", function(d) { return color(d.value/4); });
+    console.log(d3.select("rect")
+              .data(nodes)
+              .attr("name","Alabama"));
 
     node.append("text")
-      .attr("dx", function(d) { return d.r/1.8;})
+      .attr("dx", function(d) { return d.r/2;})
       .attr("dy", function(d) { return d.r;})
       .text(function(d) { return d.name; })
-      .style("font-size", function(d) {return d.value * 150;})
+      .style("font-size", function(d) {return d.value * 10;})
       .style("fill", "white")
       .style("cursor", "default");
 
+////////////////MINIMAP/////////////////////
+
+  var g = svg.selectAll(".minimap")
+            .data(us.features)
+            .enter()
+            .append("g");
+
+      g.selectAll("path")
+          .data(us.features)
+        .enter().append("path")
+          .attr("d", path)
+          .attr("class", "feature")
+          .style("stroke", "white");
+
+      g.selectAll("path")
+          .data(nodes)
+          .style("fill", function(d) { return color(d.att); });
+
+//////////////MINIMAP END////////////////////
+
+  //function minimouseover
 
   function tick(e) {
     node.each(gravity(e.alpha * .1))
@@ -136,5 +167,5 @@ d3.json("data/us-state-centroids1.json", function(error, states) {
       });
     };
   }
-});
+};
 

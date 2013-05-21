@@ -1,5 +1,5 @@
 // Ratio of Obese (BMI >= 30) in U.S. Adults, CDC 2008
-var valueById2 = [
+var valueById = [
    NaN, .187, .198,  NaN, .133, .175, .151,  NaN, .100, .125,
   .171,  NaN, .172, .133,  NaN, .108, .142, .167, .201, .175,
   .159, .169, .177, .11, .163, .117, .182, .153, .195, .189,
@@ -11,7 +11,7 @@ var valueById2 = [
 var active, inactive;
 
 var color = d3.scale.linear()
-              .domain([0, d3.max(valueById)])
+              .domain([0, 10])
               .range(["blue", "purple"]);
 
 var margin = {top: -20, right: 20, bottom: 20, left: 20},
@@ -23,12 +23,12 @@ var margin = {top: -20, right: 20, bottom: 20, left: 20},
     width = innerWidth - padding.left - padding.right,
     height = innerHeight - padding.top - padding.bottom;
 
-var projection = d3.geo.albersUsa()
+var projection1 = d3.geo.albersUsa()
     .scale(475)
     .translate([width / 1.1, height / 1]);
 
 var path = d3.geo.path()
-    .projection(projection);    
+    .projection(projection1);    
 
 var svg = d3.select("#mymap").append("svg")
     .attr("width", outerWidth)
@@ -40,8 +40,6 @@ svg.append("rect")
     .attr("height", height)
     .on("click", reset);
 
-var g = svg.append("g");
-
 queue()
     .defer(d3.json, "data/us.json")
     .defer(d3.csv, "data/fakedata.csv")
@@ -50,34 +48,61 @@ queue()
 
 function ready(error, us, data, states) {
 
-  var nodes2 = us.features
-      .filter(function(d) { return !isNaN(valueById2[+d.id]); })
+  var nodes2 = states.features
       .map(function(d) {
-        var point = projection1(d.geometry.coordinates),
-            value = valueById[+d.id];
-            namestate = d.properties.name;
-        if (isNaN(value)) fail();
+        var id = d.id,
+            point = projection1(d.geometry.coordinates),
+            namestate = d.properties.name,
+            ATT = d.properties.ATT;
+        if (isNaN(ATT)) fail();
         return {
-          value: value, name: namestate
+          id: id,
+          name: namestate,
+          att: ATT
         };
       });
 
-  var usmap = svg.selectAll("path")
-      .data(us.features)
-    .enter().append("g");
+  var g = svg.selectAll(".minimap")
+            .data(us.features)
+            .enter()
+            .append("g");
 
-    usmap.append("path")
-      .attr("d", path)
-      .attr("class", "feature")
-      .on("mouseover", function(d) { console.log(d); })
-      .on("click", click);
+      g.selectAll("path")
+          .data(us.features)
+        .enter().append("path")
+          .attr("d", path)
+          .attr("class", "feature")
+          .style("stroke", "white");
 
-  // g.selectAll("path")
-  //     .data(nodes2)
-  //     .style("fill", function(d) { return color(d.value); })
-  //     .on("mouseover", function(d) { console.log(d); });
+      g.selectAll("path")
+          .data(nodes2)
+          .style("fill", function(d) { return color(d.att); });
+    }
 
+function minimouse(d) {
+  d3.select(this)
+    .style("stroke","black")
+    .style("stroke-width", .2)
+    .classed("tooltip", true);
+
+  d3.selectAll(".tooltip")
+    .transition()        
+    .duration()
+    .text(function(d){return d;})      
+    .style("opacity", .9)
+    .attr("dx",0)
+    .attr("dy",0); 
 }
+function minimouseout(d) {
+  d3.select(this)
+    .style("stroke","white")
+    .style("stroke-width",1)
+    .transition()        
+    .duration(200)      
+    .style("opacity", 0)
+    .classed("tooltip", false);
+}
+
 
 function click(d) {
   if (active === d) return reset();

@@ -49,5 +49,5 @@
 {"type":"Feature","id":"53","geometry":{"type":"Point","coordinates":[-121.624501,47.341728]},"properties":{"abb":"WA","name":"Washington","population":5894121, "ATT":7, "CELCO": 8,"Sprint":10,"T-Mobile":4,"Verizon":3,"Leap Wireless":5,"New Cingular":4}},
 {"type":"Feature","id":"54","geometry":{"type":"Point","coordinates":[-80.820221,38.767195]},"properties":{"abb":"WV","name":"West Virginia","population":1808344, "ATT":7, "CELCO": 8,"Sprint":10,"T-Mobile":4,"Verizon":3,"Leap Wireless":5,"New Cingular":4}},
 {"type":"Feature","id":"55","geometry":{"type":"Point","coordinates":[-89.001006,43.728544]},"properties":{"abb":"WI","name":"Wisconsin","population":5363675, "ATT":7, "CELCO": 8,"Sprint":10,"T-Mobile":4,"Verizon":3,"Leap Wireless":5,"New Cingular":4}},
-{"type":"Feature","id":"56","geometry":{"type":"Point","coordinates":[-107.008835,42.675762]},"properties":{"abb":"WY","name":"Wyoming","population":493782, "ATT":7, "CELCO": 8,"Sprint":10,"T-Mobile":4,"Verizon":3,"Leap Wireless":5,"New Cingular":4}}
+{"type":"Feature","id":"56","geometry":{"type":"Point","coordinates":[-107.008835,42.675762]},"properties":{"abb":"WY","name":"Wyoming","population":493782, "ATT":7, "CELCO": 8,"Sprint":10,"T-Mobile":4,"Verizon":3,"Leap Wireless":5,"New Cingular":4}}	
 ]}
