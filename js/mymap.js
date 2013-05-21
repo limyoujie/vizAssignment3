@@ -1,5 +1,5 @@
 // Ratio of Obese (BMI >= 30) in U.S. Adults, CDC 2008
-var valueById = [
+var valueById2 = [
    NaN, .187, .198,  NaN, .133, .175, .151,  NaN, .100, .125,
   .171,  NaN, .172, .133,  NaN, .108, .142, .167, .201, .175,
   .159, .169, .177, .11, .163, .117, .182, .153, .195, .189,
@@ -50,11 +50,26 @@ queue()
 
 function ready(error, us, data, states) {
 
-  g.selectAll("path")
+  var nodes2 = us.features
+      .filter(function(d) { return !isNaN(valueById2[+d.id]); })
+      .map(function(d) {
+        var point = projection1(d.geometry.coordinates),
+            value = valueById[+d.id];
+            namestate = d.properties.name;
+        if (isNaN(value)) fail();
+        return {
+          value: value, name: namestate
+        };
+      });
+
+  var usmap = svg.selectAll("path")
       .data(us.features)
-    .enter().append("path")
+    .enter().append("g");
+
+    usmap.append("path")
       .attr("d", path)
       .attr("class", "feature")
+      .on("mouseover", function(d) { console.log(d); })
       .on("click", click);
 
   // g.selectAll("path")

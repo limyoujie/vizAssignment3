@@ -60,20 +60,19 @@ d3.json("data/us-state-centroids1.json", function(error, states) {
       .enter().append("g")
       .call(force.drag);
 
-    // node.append("image")
-    //   .attr("xlink:href", "happycrab.gif")
-    //   .attr("x", -8)
-    //   .attr("y", -8)
-    //   .attr("width", function(d) { return d.r * 2; })
-    //   .attr("height", function(d) { return d.r * 2; })
+/*    node.append("image")
+      .attr("xlink:href", "cell.gif")
+      .attr("x", -8)
+      .attr("y", -8)
+      .attr("width", function(d) { return d.r * 2; })
+      .attr("height", function(d) { return d.r * 2; })*/
 
     node.append("rect")
       .attr("class", "squares")
       .attr("width", function(d) { return d.r * 2; })
       .attr("height", function(d) { return d.r * 2; })
       //.style("fill-opacity", 0.5)
-      .style("fill", function(d) { return color(d.value); })
-      .style("cursor", "move");
+      .style("fill", function(d) { return color(d.value); });
 
     // node.append("rect")
     //   .attr("class", "squares")
@@ -90,7 +89,7 @@ d3.json("data/us-state-centroids1.json", function(error, states) {
       .text(function(d) { return d.name; })
       .style("font-size", function(d) {return d.value * 150;})
       .style("fill", "white")
-      .style("cursor", "move");
+      .style("cursor", "default");
 
 
   function tick(e) {
