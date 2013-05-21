@@ -1,18 +1,31 @@
+// Ratio of Obese (BMI >= 30) in U.S. Adults, CDC 2008
+var valueById = [
+   NaN, .187, .198,  NaN, .133, .175, .151,  NaN, .100, .125,
+  .171,  NaN, .172, .133,  NaN, .108, .142, .167, .201, .175,
+  .159, .169, .177, .11, .163, .117, .182, .153, .195, .189,
+  .134, .163, .133, .151, .145, .130, .139, .169, .164, .175,
+  .135, .152, .169,  NaN, .132, .167, .139, .184, .159, .140,
+  .146, .157,  NaN, .139, .183, .160, .143
+];
 
-var active;
+var active, inactive;
 
-var margin = {top: 20, right: 20, bottom: 20, left: 20},
+var color = d3.scale.linear()
+              .domain([0, d3.max(valueById)])
+              .range(["blue", "purple"]);
+
+var margin = {top: -20, right: 20, bottom: 20, left: 20},
     padding = {top: 60, right: 60, bottom: 60, left: 60},
-    outerWidth = 960,
-    outerHeight = 400,
+    outerWidth = 350,
+    outerHeight = 300,
     innerWidth = outerWidth - margin.left - margin.right,
     innerHeight = outerHeight - margin.top - margin.bottom,
     width = innerWidth - padding.left - padding.right,
     height = innerHeight - padding.top - padding.bottom;
 
 var projection = d3.geo.albersUsa()
-    .scale(900)
-    .translate([width / 1.8, height / 1.2]);
+    .scale(475)
+    .translate([width / 1.1, height / 1]);
 
 var path = d3.geo.path()
     .projection(projection);    
@@ -29,99 +42,36 @@ svg.append("rect")
 
 var g = svg.append("g");
 
-var height2 = 200;
-var svg2 = d3.select("#mybar").append("svg")
-    .attr("width", 1000)
-    .attr("height", height2)
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
 queue()
     .defer(d3.json, "data/us.json")
     .defer(d3.csv, "data/fakedata.csv")
+    .defer(d3.json, "data/us-state-centroids1.json")
     .await(ready);
 
-function ready(error, us, data) {
+function ready(error, us, data, states) {
 
   g.selectAll("path")
-      .data(topojson.feature(us, us.objects.states).features)
+      .data(us.features)
     .enter().append("path")
       .attr("d", path)
       .attr("class", "feature")
       .on("click", click);
 
-  g.append("path")
-      .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
-      .attr("class", "mesh")
-      .attr("d", path);
-
-  var xScale = d3.scale.ordinal()
-                .domain(d3.range(data.length))
-                .rangeRoundBands([0, 1000], 0.05);
-
-  svg2.selectAll("rect")
-   .data(data)
-   .enter()
-   .append("rect")
-   .attr("x", function(d, i) {
-    return xScale(i);
-    console.log(xScale(i));
-})
-   .attr("y", function(d) {
-    return height2 - (d.Attribute1 * 1.5);  //Height minus data value
-})
-   .attr("width", xScale.rangeBand())
-   .attr("height", function(d) {
-    return (d.Attribute1 * 1.5);  //Just the data value
-})
-   .style("fill", function(d) {
-    return "rgb(" + Math.round(d.Attribute1 * 2.2) + ", " + Math.round(d.Attribute1 * 2.6) + ", " + Math.round(d.Attribute1 * 1.1) + ")";
-});
-
-  svg2.selectAll("rect")
-           .sort(function(a, b) {
-                   return d3.descending(a, b);
-                })
-           .transition()
-           .duration(1000)
-           .attr("x", function(d, i) {
-                        return xScale(i);
-           });
-
-  svg2.selectAll("text")
-   .data(data)
-   .enter()
-   .append("text")
-   .text(function(d) {
-        return Math.round(d.Attribute1);
-   })
-   .attr("x", function(d, i) {
-        return xScale(i) + 9;
-    })
-   .attr("y", function(d) {
-        return height2 - (d.Attribute1 * 1.5) - 5;             
-   })
-   .attr("font-family", "sans-serif")
-   .attr("font-size", "11px")
-   .attr("fill", "black")
-   .attr("text-anchor", "middle");
-
-  svg2.selectAll("text")
-           .sort(function(a, b) {
-                   return d3.descending(a, b);
-                })
-           .transition()
-           .duration(1000)
-           .attr("x", function(d, i) {
-                        return xScale(i) + xScale.rangeBand() / 2;
-           });  
+  g.selectAll("path")
+      .data(nodes2)
+      .style("fill", function(d) { return color(d.value); })
+      .on("mouseover", function(d) { console.log(d); });
 
 }
 
 function click(d) {
   if (active === d) return reset();
-  g.selectAll(".active").classed("active", false);
+  g.selectAll(".active")
+    .classed("active", false);
+  g.selectAll(".feature")
+    .classed("inactive", true);
   d3.select(this).classed("active", active = d);
+  
 
   var b = path.bounds(d);
   g.transition().duration(750).attr("transform",
@@ -131,30 +81,11 @@ function click(d) {
 }
 
 function reset() {
-  g.selectAll(".active").classed("active", active = false);
+  
   g.transition().duration(750).attr("transform", "");
+  g.selectAll(".feature.inactive")
+    .classed("inactive", inactive = false);
+  g.selectAll(".active")
+    .classed("active", active = false);
+
 }
-
-var sortBars = function() {
-
-        svg.selectAll("rect")
-           .sort(function(a, b) {
-                   return d3.descending(a, b);
-                })
-           .transition()
-           .duration(1000)
-           .attr("x", function(d, i) {
-                        return xScale(i);
-           });
-
-         svg.selectAll("text")
-           .sort(function(a, b) {
-                   return d3.descending(a, b);
-                })
-           .transition()
-           .duration(1000)
-           .attr("x", function(d, i) {
-                        return xScale(i) + xScale.rangeBand() / 2;
-           });  
-
-};
