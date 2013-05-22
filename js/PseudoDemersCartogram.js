@@ -40,6 +40,10 @@ var svg = d3.select("#mymap").append("svg")
     .attr("viewBox", "0 0 600 500")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");//MINIMAP
 
+var svg2 = d3.select("#mymap2").append("svg")
+    .attr("width", 960)
+    .attr("height", 100);//TITLE SCREEN
+
 var svg1 = d3.select("#mymap2").append("svg")
     .attr("width", "100%")
     .attr("height", "75%")
@@ -66,7 +70,6 @@ function ready(error, us, fakedata, states) {
           att: ATT
         };
       });
-
   force
       .nodes(nodes)
       .on("tick", tick)
@@ -103,6 +106,7 @@ function ready(error, us, fakedata, states) {
       .style("fill", "white")
       .style("cursor", "default");
 
+
 ////////////////MINIMAP/////////////////////
 
   var g = svg.selectAll(".minimap")
@@ -123,7 +127,72 @@ function ready(error, us, fakedata, states) {
 
 //////////////MINIMAP END////////////////////
 
-  //function minimouseover
+/////////TITLE DATA//////////////////////
+
+    svg2.append("text")
+      .text("AT&T")
+      .style("font-size", "66px")
+      .style("font-family", "Yanone Kaffeesatz")
+      .attr("dx", -100)
+      .attr("dy", 70)
+    .transition()
+      .delay(500)
+      .ease("bounce")
+      .duration(2500)
+      .attr("dx", 300)
+      .attr("dy", 70)
+    .transition()
+      .ease("linear")
+      .attr("dx", 200)
+      .attr("dy", 70);
+
+    svg2.append("text")
+      .text("vs.")
+      .style("font-size", "136px")
+      .style("font-family", "Yanone Kaffeesatz")
+      .attr("dx", 350)
+      .attr("dy", -100)
+    .transition()
+      .ease("backs")
+      .delay(1250)
+      .duration(4000)
+      .attr("dx", 350)
+      .attr("dy", 80);
+
+    svg2.append("text")
+      .text("Verizon")
+      .style("font-size", "66px")
+      .style("font-family", "Yanone Kaffeesatz")
+      .attr("dx", 1000)
+      .attr("dy", 80)
+    .transition()
+      .delay(500)
+      .ease("bounce")
+      .duration(2500)
+      .attr("dx", 400)
+      .attr("dy", 80)
+    .transition()
+      .ease("linear")
+      .attr("dx", 500)
+      .attr("dy", 80);
+
+  setInterval(4000,fireworks());
+
+  function fireworks() {
+    var transforms = ["100,0","100,30","100,-30","-100,10","-100,-10","-100,30","-100,-30","-200,0",
+    "-200,20","-200,-20","200,-30","200,30","200,10","200,-10","-50,80","-50,-80",
+    "50,80","50,-80"];
+    for (var i = 0; i < transforms.length; i++) {
+      svg2.append("svg:circle")
+        .attr("cx",400).attr("cy",45).attr("r",0)
+        .style("stroke",color(5*Math.random())).style("fill",color(5)).style("stroke-opacity",0.5)
+        .transition()
+          .attr("transform","translate("+transforms[i]+")").delay(5000).duration(2000).ease(Math.sqrt).attr("r",Math.random()*30)
+          .style("stroke-opacity",1e-6).style("fill-opacity",1e-6).remove();
+    }
+  }
+
+  /////////////////TITLE DATA/////////////////
 
   function tick(e) {
     node.each(gravity(e.alpha * .1))
