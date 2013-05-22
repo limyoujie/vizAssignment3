@@ -35,13 +35,15 @@ var force = d3.layout.force()
     .size([width1, height1]);
 
 var svg = d3.select("#mymap").append("svg")
-    .attr("width", outerWidth)
-    .attr("height", outerHeight)
+    .attr("width", "100%")
+    .attr("height", "50%")
+    .attr("viewBox", "0 0 600 500")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");//MINIMAP
 
 var svg1 = d3.select("#mymap2").append("svg")
-    .attr("width", width1)
-    .attr("height", height1);//MAIN MAP
+    .attr("width", "100%")
+    .attr("height", "75%")
+    .attr("viewBox", "0 0 900 700");//MAIN MAP
 
 queue()
     .defer(d3.json, "data/us.json")
@@ -58,8 +60,8 @@ function ready(error, us, fakedata, states) {
             ATT = d.properties.ATT;
 
         return {
-          x: point[0]-120, y: point[1],
-          x0: point[0]-120, y0: point[1],
+          x: point[0]-120, y: point[1]+50,
+          x0: point[0]-120, y0: point[1]+50,
           r: radius(ATT), name: namestate,
           att: ATT
         };
