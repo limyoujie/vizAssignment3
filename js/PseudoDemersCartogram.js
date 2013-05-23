@@ -249,7 +249,7 @@ function minimouseout(d){
             for(key in ProvidersPerState){
                 
                 // Chanhing Size and Colors
-                node.selectAll("#"+key)
+                d3.select("#"+key)
                 .transition()
                 .delay(5000)
                 .ease("linear")
@@ -275,9 +275,7 @@ function minimouseout(d){
                                                   return "blue";
                                               }
                                               else {return "green";}
-                                              })
-                .on("mouseover",minimouseover)
-                .on("mouseout",minimouseout);
+                                              });
 
                 // Text
                 // d3.select("#"+key+"Text")

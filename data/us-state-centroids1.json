@@ -1,6 +1,6 @@
 {"type":"FeatureCollection","features":[
 {"type":"Feature","id":"01","geometry":{"type":"Point","coordinates":[-86.766233,33.001471]},"properties":{"abb":"AL","name":"Alabama","population":4447100,"ATT":3,"Cellco":4,"Sprint":6,"TMobile":8}},
-{"typee":"Feature","id":"02","geometry":{"type":"Point","coordinates":[-148.716968,61.288254]},"properties":{"abb":"AK","name":"Alaska","population":626932,"ATT":2,"Cellco":6,"Sprint":6,"TMobile":8}},
+{"type":"Feature","id":"02","geometry":{"type":"Point","coordinates":[-148.716968,61.288254]},"properties":{"abb":"AK","name":"Alaska","population":626932,"ATT":2,"Cellco":6,"Sprint":6,"TMobile":8}},
 {"type":"Feature","id":"04","geometry":{"type":"Point","coordinates":[-111.828711,33.373506]},"properties":{"abb":"AZ","name":"Arizona","population":5130632,"ATT":8,"Cellco":1,"Sprint":6,"TMobile":8}},
 {"type":"Feature","id":"05","geometry":{"type":"Point","coordinates":[-92.576816,35.080251]},"properties":{"abb":"AR","name":"Arkansas","population":2673400,"ATT":0,"Cellco":2,"Sprint":6,"TMobile":8}},
 {"type":"Feature","id":"06","geometry":{"type":"Point","coordinates":[-119.355165,35.458606]},"properties":{"abb":"CA","name":"California","population":33871648,"ATT":1,"Cellco":3,"Sprint":6,"TMobile":8}},
