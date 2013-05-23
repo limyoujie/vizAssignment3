@@ -156,7 +156,7 @@ function minimouseover(d){
         .style("stroke","black");
 
       d3.selectAll("."+d.name)
-        .style("fill", function(d) { return "gold"; })
+        //.style("fill", function(d) { return "gold"; })
         .style("stroke-width", 1);
 
       $("#pop-up").fadeOut(100,function () {
@@ -180,7 +180,7 @@ function minimouseout(d){
         .style("stroke","white");
 
       d3.selectAll("."+name)
-        .style("fill", function(d) { return color(d.att); })
+        //.style("fill", function(d) { return color(d.att); })
         .style("stroke-width", 1);
 
       $("#pop-up").fadeOut(50);
