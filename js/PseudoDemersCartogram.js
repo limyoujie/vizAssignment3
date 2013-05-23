@@ -64,7 +64,7 @@ function ready(error, us, fakedata, states) {
   d3.select("#fight")
     .on("click", fight);
 
-  var ProvidersPerState = {}
+  var ProvidersPerState = {};
   var nodes = states.features
       .map(function(d) {
         var point = projection(d.geometry.coordinates),
@@ -180,8 +180,6 @@ function minimouseout(d){
         .style("stroke","white");
 
       d3.selectAll("."+name)
-        .attr("width", function(d) { return d.r * 2; })
-        .attr("height", function(d) { return d.r * 2; })
         .style("fill", function(d) { return color(d.att); })
         .style("stroke-width", 1);
 
@@ -295,6 +293,10 @@ function minimouseout(d){
                     }
 
             }
+
+            node.append("rect")
+                .on("mouseover",minimouseover)
+                .on("mouseout",minimouseout);
 
             Total = [50, 25];
             SumTotal = PointsPlayer1+ PointsPlayer2;
